@@ -6,3 +6,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const base_url = process.env.NODE_ENV=="development" ? process.env.BASE_URL : process.env.BASE_URL_PROD
+
+export const parseTitleForUrl = (title:string) => {
+  const res = title.replaceAll(" ","_").replaceAll("'","").replaceAll('"',"").replaceAll("!","").replaceAll("@","").replaceAll("#","").replaceAll("$","").replaceAll("%","").replaceAll("^","").replaceAll("&","").replaceAll("*","").replaceAll("(","").replaceAll(")","").replaceAll("+","").replaceAll("-","").replaceAll("=","")
+  return res
+}

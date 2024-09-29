@@ -43,7 +43,7 @@ export function Form({title,descr,tags,casts,genre,rating,release,id}:Movie) {
   return (
     <Dialog>
       <DialogTrigger asChild className="block mx-auto">
-        <Button variant="outline" className="text-white/80">Add movie</Button>
+        <Button variant="outline" className="text-white/80">Edit Movie</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

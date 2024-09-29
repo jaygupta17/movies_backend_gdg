@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { parseTitleForUrl } from "@/lib/utils"
 import { useState } from "react"
 
 export function Form() {
@@ -24,7 +25,7 @@ export function Form() {
     const [tags, setTags] = useState<string[]>([]);
     const handleSubmit = () => {
         const data = new FormData()
-        data.append("id","movie_"+title.replace(" ","_"))
+        data.append("id","movie_"+parseTitleForUrl(title))
         data.append("title", title); 
         data.append("descr", descr); 
         data.append("casts", casts.join(',')); 
@@ -41,9 +42,9 @@ export function Form() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Add  Moive</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            Upload the details of movie
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

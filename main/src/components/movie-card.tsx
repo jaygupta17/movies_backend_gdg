@@ -2,12 +2,14 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Star } from "lucide-react"
 import { Movie } from "@/lib/data"
+import Link from "next/link"
+import { parseTitleForUrl } from "@/lib/utils"
 
 export default function MovieFeed({movies}:{movies:Movie[]}) {
   return (
     <div className="container mx-auto py-2">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {movies.map((movie) => (
+        {movies.map(movie => (
           <Card key={movie.id} className="overflow-hidden group hover:bg-white/5 dark transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
             <div className="aspect-video group-hover:backdrop-blur-[10px] relative">
               {/* <img
@@ -30,7 +32,11 @@ export default function MovieFeed({movies}:{movies:Movie[]}) {
               </div>
             </CardContent>
             <CardFooter className="p-4 pt-0">
-              <Button className="w-full">View</Button>
+            <Link className="w-full" href={"/"+movie.id}>
+              <Button className="w-full">
+                  View
+              </Button>
+            </Link>
             </CardFooter>
           </Card>
         ))}
