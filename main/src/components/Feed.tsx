@@ -26,7 +26,6 @@ export const Feed = () => {
     }
     useEffect(()=>{
         fetchMovies()
-        if(movies) setFilteredMovies(filterMovies(movies,search,year))
     },[search,genre,year])
 
     return(
@@ -45,7 +44,7 @@ export const Feed = () => {
                 </select>
             </div>
             <div className="min-h-[90svh] flex justify-center items-center">
-                {!isPending ? filteredMovies?.length ? <MovieFeed movies={filteredMovies}/> : "Not Found..." :"Loading..."}
+                {!isPending ? filteredMovies?.length ? <MovieFeed movies={filteredMovies}/> : "Not Found!! Fetching..." :"Loading..."}
             </div>
         </div>
     )

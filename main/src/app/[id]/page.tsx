@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { deleteMovie, getMovieById } from "../actions"
 import { Form } from "@/components/edit-form"
 import { Movie } from "@/lib/data"
@@ -10,14 +10,17 @@ import { useRouter } from "next/navigation"
 
 export default function page({params}:{params:{id:string}}) {
     const [movie,setMovie] = useState<Movie>()
+    const [isPending,startTransition] = useTransition()
     const router = useRouter()
     const {id} = params
     const fetchDetails = () => {
         const data = new FormData()
         data.append("id",id) 
-        getMovieById(data).then(res=>{
-            if(res.not_found || res.error) return router.push("/")
-            setMovie(res.data)
+        startTransition(()=>{
+            getMovieById(data).then(res=>{
+                if(res.not_found || res.error) return router.push("/")
+                setMovie(res.data)
+            })
         })
     }
     useEffect(()=>{
@@ -27,7 +30,7 @@ export default function page({params}:{params:{id:string}}) {
         <div className="min-h-[100svh] p-3">
             {movie ? <Form id={movie?.id} title={movie?.title} descr={movie?.descr} tags={movie?.tags} rating={movie?.rating} release={movie?.release} genre={movie?.genre} casts={movie?.casts} /> :""}
             <div className="min-h-[90svh] flex justify-center items-center">
-                {movie ? <Card key={movie.id} className="overflow-hidden group hover:bg-white/5 dark transition-all duration-300 hover:shadow-lg hover:-translate-y-1 md:h-[60%] h-[50%] md:w-[60%] w-[90%]">
+                {!isPending ? movie ? <Card key={movie.id} className="overflow-hidden group hover:bg-white/5 dark transition-all duration-300 hover:shadow-lg hover:-translate-y-1 md:h-[60%] h-[50%] md:w-[60%] w-[90%]">
                 <div className="aspect-video group-hover:backdrop-blur-[10px] relative">
                 {/* <img
                     src={`/placeholder.svg?height=200&width=300&text=${encodeURIComponent(movie.title)}`}
@@ -54,6 +57,7 @@ export default function page({params}:{params:{id:string}}) {
                     data.append("id",movie.id)
                     deleteMovie(data).then(res=>{
                         if(res.success){
+                            alert("Movie Deleted from Database, It will be deleted from cache in 1 minute")
                             return router.push("/")
                         }
                         if(!res.success) return alert("Failed to delete")
@@ -61,7 +65,7 @@ export default function page({params}:{params:{id:string}}) {
                     })
                 }}>Delete</Button>
                 </CardFooter>
-            </Card> : <h3 className="font-semibold text-lg mb-2">Not found</h3> }
+            </Card> : <h3 className="font-semibold text-lg mb-2">Not found</h3> : <h3 className="font-semibold text-lg mb-2">Loading...</h3> }
             </div>
         </div>
     )
