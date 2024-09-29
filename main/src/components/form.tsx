@@ -13,7 +13,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { parseTitleForUrl } from "@/lib/utils"
-import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useState, useTransition } from "react"
 
 export function Form() {
     const [title, setTitle] = useState<string>(''); 
@@ -23,6 +24,8 @@ export function Form() {
     const [release, setRelease] = useState<string>(''); 
     const [rating, setRating] = useState<string>(''); 
     const [tags, setTags] = useState<string[]>([]);
+    const [isPending,startTransition] = useTransition()
+    const router = useRouter()
     const handleSubmit = () => {
         const data = new FormData()
         data.append("id","movie_"+parseTitleForUrl(title))
@@ -33,7 +36,9 @@ export function Form() {
         data.append("release", release); 
         data.append("rating", rating); 
         data.append("tags", tags.join(','))
-        addMovie(data).then(data=>alert("Done"))
+        startTransition(()=>{
+          addMovie(data)
+        })
     }
   return (
     <Dialog>
@@ -77,9 +82,10 @@ export function Form() {
             <Input id="tags" defaultValue={tags.join(',')} onChange={(e) => setTags(e.target.value.split(','))} className="col-span-3" /> </div>
         </div>
         <DialogFooter>
-            <Button type="submit" onClick={handleSubmit}>Save changes</Button>
+            <Button type="submit" disabled={isPending} onClick={handleSubmit}>Create</Button>
         </DialogFooter>
       </DialogContent>
+      
     </Dialog>
   )
 }

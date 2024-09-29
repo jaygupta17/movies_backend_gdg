@@ -2,7 +2,7 @@
 
 import { getMovies } from "@/app/actions"
 import { filterMovies, Movie } from "@/lib/data"
-import { useEffect, useState } from "react"
+import { useEffect, useState,useTransition } from "react"
 import MovieFeed from "./movie-card"
 
 export const Feed = () => {
@@ -11,14 +11,17 @@ export const Feed = () => {
     const [year,setYear] = useState<string>()
     const [movies,setMovies] = useState<Movie[]>()
     const [filteredMovies,setFilteredMovies] = useState<Movie[]>()
+    const [isPending,startTransition] = useTransition()
     const fetchMovies = () => {
         const data = new FormData()
         data.append("genre",genre)
-        getMovies(data).then(data=>{
-            if (data.not_found) {
-                return setMovies(undefined)
-            }
-            setFilteredMovies(filterMovies(data.data,search,year))
+        startTransition(()=>{
+            getMovies(data).then(data=>{
+                if (data.not_found) {
+                    return setMovies(undefined)
+                }
+                setFilteredMovies(filterMovies(data.data,search,year))
+            })
         })
     }
     useEffect(()=>{
@@ -41,8 +44,8 @@ export const Feed = () => {
                     <option className="bg-white/5 hover:bg-white/10" value="sci-fi">Sci-Fi</option>
                 </select>
             </div>
-            <div className="min-h-[90svh]">
-                {filteredMovies?.length ? <MovieFeed movies={filteredMovies}/> : "No found"}
+            <div className="min-h-[90svh] flex justify-center items-center">
+                {!isPending ? filteredMovies?.length ? <MovieFeed movies={filteredMovies}/> : "Not Found..." :"Loading..."}
             </div>
         </div>
     )

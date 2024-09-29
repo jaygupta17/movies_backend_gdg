@@ -71,8 +71,10 @@ export const addMovie = async (data:FormData) => {
         ]}
         const res = await axios.post(base_url+"/api/movies",JSON.stringify(obj))
         await redis.set(data.get("id") as string,JSON.stringify(res.data.movies[0]))
+        return alert("Created")
     } catch (error) {
         console.log(error);
+        return alert("Error while creating")
     }
 }
 

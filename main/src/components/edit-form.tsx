@@ -13,7 +13,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Movie } from "@/lib/data"
-import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useState, useTransition } from "react"
 
 export function Form({title,descr,tags,casts,genre,rating,release,id}:Movie) {
     const [Etitle, setTitle] = useState<string>(title || ""); 
@@ -23,6 +24,8 @@ export function Form({title,descr,tags,casts,genre,rating,release,id}:Movie) {
     const [Erelease, setRelease] = useState<string>(release); 
     const [Erating, setRating] = useState<string>(rating); 
     const [Etags, setTags] = useState<string[]>(tags);
+    const [isPending,startTransition] = useTransition()
+    const router = useRouter()
     const handleSubmit = () => {
         const data = new FormData()
         const isEmpty = (!Etitle || !Edescr || !Ecasts.length || !Egenre.length || !Erelease || !Erating || !Etags.length)
@@ -35,9 +38,13 @@ export function Form({title,descr,tags,casts,genre,rating,release,id}:Movie) {
         data.append("release", Erelease); 
         data.append("rating", Erating); 
         data.append("tags", Etags.join(','))
-        updateMovie(data).then(data=>{
+        startTransition(()=>{
+          updateMovie(data).then(data=>{
             if(data.error || !data.success) return alert("error")
-            return alert("success")
+            alert("Updated")
+            router.refresh()
+            return
+        })
         })
     }
   return (
@@ -82,7 +89,7 @@ export function Form({title,descr,tags,casts,genre,rating,release,id}:Movie) {
             <Input id="tags" defaultValue={Etags? Etags.join(',') : ""} onChange={(e) => setTags(e.target.value.split(','))} className="col-span-3" /> </div>
         </div>
         <DialogFooter>
-            <Button type="submit" onClick={handleSubmit}>Save changes</Button>
+            <Button disabled={isPending} type="submit" onClick={handleSubmit}>Save changes</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
