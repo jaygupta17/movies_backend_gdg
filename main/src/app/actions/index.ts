@@ -1,5 +1,6 @@
 "use server"
 import { Movie } from '@/lib/data';
+import { base_url } from '@/lib/utils';
 import { Redis } from '@upstash/redis'
 import axios from "axios";
 
@@ -16,13 +17,13 @@ export const getMovieById = async (data:FormData)=>{
         if(cache) {
             console.log(cache);
             //@ts-ignore
-            return {data:cache.movie}
+            return {data:cache}
         }
-        const movie =await axios.get("http://localhost:3000/api/movies/"+data.get("id"))
+        const movie =await axios.get(base_url+"/api/movies/"+data.get("id"))
         if (movie) {
             console.log(movie.data.movie);
             console.log("Uploading to redis");
-            await redis.set(data.get("id") as string,JSON.stringify({movie:movie.data.movie}))
+            await redis.set(data.get("id") as string,JSON.stringify(movie.data.movie))
             console.log("Uploaded");
             return {data:movie.data.movie}
         }
@@ -41,7 +42,7 @@ export const getMovies = async (data:FormData) => {
             console.log(cache);
             return {data:cache}
         }
-        const movies = await axios.get("http://localhost:3000/api/movies?genre="+data.get("genre")||"")
+        const movies = await axios.get(base_url+"/api/movies?genre="+data.get("genre")||"")
         if (movies.data.movies.length) {
             console.log(movies.data.movies);
             console.log("Uploading to redis");
@@ -71,7 +72,7 @@ export const addMovie = async (data:FormData) => {
                 id,title,descr,release,rating,casts:casts.split(','),genre:genre.split(','),tags:tags.split(',')
             }
         ]}
-        const res = await axios.post("http://localhost:3000/api/movies",JSON.stringify(obj))
+        const res = await axios.post(base_url+"/api/movies",JSON.stringify(obj))
         await redis.set(data.get("id") as string,JSON.stringify(res.data.movies[0]))
     } catch (error) {
         console.log(error);
@@ -93,10 +94,10 @@ export const updateMovie = async (data:FormData) => {
                 id,title,descr,release,rating,casts:casts.split(','),genre:genre.split(','),tags:tags.split(',')
             }
     
-        const res = await axios.patch("http://localhost:3000/api/movies/"+id,JSON.stringify({movie}))
+        const res = await axios.patch(base_url+"/api/movies/"+id,JSON.stringify({movie}))
         console.log(res.data);
         if(res.data.message.acknowledged){
-            await redis.set(data.get("id") as string,JSON.stringify({movie}))
+            await redis.set(data.get("id") as string,JSON.stringify(movie))
             return {success:true}
         }
         return {success:false}

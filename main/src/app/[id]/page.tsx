@@ -20,7 +20,7 @@ export default function page({params}:{params:{id:string}}) {
     }
     useEffect(()=>{
         fetchDetails()
-    },[])
+    },[id])
     return(
         <div className="min-h-[100svh] p-3">
             {movie ? <Form id={movie?.id} title={movie?.title} descr={movie?.descr} tags={movie?.tags} rating={movie?.rating} release={movie?.release} genre={movie?.genre} casts={movie?.casts} /> :""}
