@@ -1,6 +1,6 @@
 - CRUD (api)
 - Redis Caching (/actions)
 - Rate limiting (middleware.ts)
-- Auth, Docker:
+- Auth, Docker: Yet to bd implemented 
 - others: code quality, project structure, typespace
 - technologies: Nextjs, Typescript, Tailwind css, shadcn , mongodb
