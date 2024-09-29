@@ -37,7 +37,12 @@ export function Form() {
         data.append("rating", rating); 
         data.append("tags", tags.join(','))
         startTransition(()=>{
-          addMovie(data)
+          addMovie(data).then(data=>{
+            if(data.error){
+              return alert("Error while Adding Movie")
+            }
+            return alert("Movie added")
+          })
         })
     }
   return (
