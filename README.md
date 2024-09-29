@@ -2,5 +2,5 @@
 - Redis Caching (/actions)
 - Rate limiting (middleware.ts)
 - Auth, Docker: Yet to bd implemented 
-- others: code quality, project structure, typespace
+- others: code quality, project structure, typesafe
 - technologies: Nextjs, Typescript, Tailwind css, shadcn , mongodb
