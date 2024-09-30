@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState, useTransition } from "react"
-import { deleteMovie, getMovieById } from "../actions"
+import { deleteMovie, getMovieById } from "@/actions"
 import { Form } from "@/components/edit-form"
 import { Movie } from "@/lib/data"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"

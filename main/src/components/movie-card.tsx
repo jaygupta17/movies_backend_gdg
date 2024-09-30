@@ -17,7 +17,7 @@ export default function MovieFeed({movies}:{movies:Movie[]}) {
                 alt={movie.title}
                 className="object-cover w-full h-full"
               /> */}
-              <div className="hidden absolute z-3 w-full px-2 top-[35%] left-[50%] translate-x-[-50%] text-center text-sm font-normal  group-hover:flex">{movie.descr}</div>
+              <div className="hidden absolute z-3 w-full px-2 top-[35%] left-[50%] translate-x-[-50%] text-center text-sm font-normal  group-hover:flex">{movie.descr.slice(0,150)+"..."}</div>
             </div>
             <CardContent className="p-4">
               <h3 className="font-semibold text-lg mb-2">{movie.title}</h3>

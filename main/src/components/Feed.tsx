@@ -1,6 +1,6 @@
 "use client"
 
-import { getMovies } from "@/app/actions"
+import { getMovies } from "@/actions"
 import { filterMovies, Movie } from "@/lib/data"
 import { useEffect, useState,useTransition } from "react"
 import MovieFeed from "./movie-card"

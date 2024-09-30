@@ -1,5 +1,5 @@
 "use client"
-import { addMovie } from "@/app/actions"
+import { addMovie } from "@/actions"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
