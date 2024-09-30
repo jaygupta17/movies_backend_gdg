@@ -1,6 +1,7 @@
 - CRUD (api)
 - Redis Caching (/actions)
 - Rate limiting (middleware.ts)
-- Auth, Docker: Yet to bd implemented 
+- Auth: not implemented
+- Docker image created, not deployed on cloud 
 - others: code quality, project structure, typesafe
 - technologies: Nextjs, Typescript, Tailwind css, shadcn , mongodb
